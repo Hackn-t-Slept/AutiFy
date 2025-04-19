@@ -3,7 +3,7 @@ import joblib
 import pandas as pd
 
 # Load model
-model = joblib.load('autism_model.pkl')
+model = joblib.load('autism_prediction_model.pkl')
 
 st.title("Autism Spectrum Disorder (ASD) Prediction")
 
