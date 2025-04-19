@@ -29,15 +29,23 @@ with st.form("autism_form"):
     submit = st.form_submit_button("Predict")
 
 if submit:
+    # Encode categorical inputs
+    gender_encoded = 0 if gender == 'm' else 1
+    jaundice_encoded = 1 if jaundice == 'yes' else 0
+    family_history_encoded = 1 if family_history == 'yes' else 0  # Even if not used in training
+    used_app_before_encoded = 1 if used_app_before == 'yes' else 0
+
+    # Create input DataFrame
     input_data = pd.DataFrame([{
         "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
         "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
-        "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
-        "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before
+        "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age,
+        "gender": gender_encoded,
+        "jaundice": jaundice_encoded,
+        "austim": family_history_encoded,  # Important: your model used 'austim' not 'family_history'
+        "used_app_before": used_app_before_encoded
     }])
 
-    # Preprocess if needed (encoding, scaling, etc.)
-    # Example: label encode gender etc., if your model expects it
-
+    # Make prediction
     prediction = model.predict(input_data)[0]
     st.success(f"Prediction: {'ASD Positive' if prediction == 1 else 'ASD Negative'}")
