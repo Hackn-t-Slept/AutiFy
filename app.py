@@ -29,6 +29,13 @@ with st.form("autism_form"):
     family_history = st.selectbox("Is there a family history of ASD?", ['yes', 'no'])
     used_app_before = st.selectbox("Have you used a screening app before?", ['yes', 'no'])
 
+    st.markdown("---")
+
+    ethnicity = st.selectbox("Ethnicity", ['White', 'Latino', 'Black', 'Asian', 'Middle Eastern', 'Pasifika', 'South Asian', 'Hispanic', 'Turkish', 'Others'])
+    austim = st.selectbox("Have you been diagnosed with autism before?", ['yes', 'no'])
+    contry_of_res = st.selectbox("Country of Residence", ['USA', 'UK', 'India', 'Canada', 'Others'])
+    relation = st.selectbox("Relation of person completing the test", ['Self', 'Parent', 'Relative', 'Health care professional', 'Others'])
+
     submit = st.form_submit_button("Predict")
 
 if submit:
@@ -36,8 +43,9 @@ if submit:
         "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
         "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
         "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
-        "jaundice": jaundice, "family_history": family_history,
-        "used_app_before": used_app_before
+        "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before,
+        "ethnicity": ethnicity, "austim": austim, "contry_of_res": contry_of_res,
+        "relation": relation, "result": 0  # Placeholder, assuming 'result' was in original dataset but not a target
     }])
 
     # Encode categorical variables
@@ -45,6 +53,12 @@ if submit:
     input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
     input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
     input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
+    input_data['austim'] = input_data['austim'].map({'no': 0, 'yes': 1})
+    input_data['relation'] = input_data['relation'].map({
+        'Self': 0, 'Parent': 1, 'Relative': 2, 'Health care professional': 3, 'Others': 4
+    })
+    input_data['ethnicity'] = input_data['ethnicity'].astype('category').cat.codes
+    input_data['contry_of_res'] = input_data['contry_of_res'].astype('category').cat.codes
 
     # Ensure all expected features are present and ordered correctly
     try:
