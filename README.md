@@ -28,9 +28,4 @@ Autify integrates the following technologies for a robust and seamless experienc
 - **Streamlit**: Smooth and engaging interface.  
 - **Jupyter Notebook**: For data exploration and prototyping.  
 
-## 🗂️ Project Structure  
-Here’s how Autify is organized:  
-- **Core**: Handles feature engineering, model training, and evaluation.  
-- **Visualization**: Tools for interpreting predictions and feature importance.  
-- **Interface**: Streamlit scripts for interactive user engagement.  
-- **Documentation**: Detailed notes and references for better understanding.
+
