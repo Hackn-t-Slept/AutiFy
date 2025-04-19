@@ -72,11 +72,12 @@ def inject_custom_css():
 inject_custom_css()
 
 # Logo and Title
+st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+logo = Image.open("Logo.png")
+st.image(logo, width=100)
 st.markdown("""
-<div style='display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;'>
-    <img src='Logo.png' alt='Autify Logo' style='height:100px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 10px;'>
-    <h1 style='text-align: center;'>🧠 Autify</h1>
-    <p style='text-align: center;'>We Connect the Dots—Even the Ones You Didn’t See</p>
+    <h1>🧠 Autify</h1>
+    <p>We Connect the Dots—Even the Ones You Didn’t See</p>
 </div>
 """, unsafe_allow_html=True)
 
