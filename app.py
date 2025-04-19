@@ -29,48 +29,39 @@ with st.form("autism_form"):
     family_history = st.selectbox("Is there a family history of ASD?", ['yes', 'no'])
     used_app_before = st.selectbox("Have you used a screening app before?", ['yes', 'no'])
 
-    # Missing fields
-    ethnicity = st.selectbox("Ethnicity", ['White', 'Latino', 'Black', 'Asian', 'Others'])
-    austim = st.selectbox("Have you been diagnosed with ASD before?", ['yes', 'no'])
-    contry_of_res = st.text_input("Country of Residence", 'USA')
-    relation = st.selectbox("Who is completing this form?", ['Self', 'Parent', 'Relative', 'Healthcare professional'])
+    st.markdown("---")
+
+    ethnicity = st.selectbox("Ethnicity", ['White', 'Latino', 'Black', 'Asian', 'Middle Eastern', 'Pasifika', 'South Asian', 'Hispanic', 'Turkish', 'Others'])
+    austim = st.selectbox("Have you been diagnosed with autism before?", ['yes', 'no'])
+    contry_of_res = st.selectbox("Country of Residence", ['USA', 'UK', 'India', 'Canada', 'Others'])
+    relation = st.selectbox("Relation of person completing the test", ['Self', 'Parent', 'Relative', 'Health care professional', 'Others'])
 
     submit = st.form_submit_button("Predict")
 
 if submit:
-    # Construct full input with likely-positive values
     input_data = pd.DataFrame([{
-        "A1_Score": A1_Score,
-        "A2_Score": A2_Score,
-        "A3_Score": A3_Score,
-        "A4_Score": A4_Score,
-        "A5_Score": A5_Score,
-        "A6_Score": A6_Score,
-        "A7_Score": A7_Score,
-        "A8_Score": A8_Score,
-        "A9_Score": A9_Score,
-        "A10_Score": A10_Score,
-        "age": age,
-        "gender": gender,
-        "jaundice": jaundice,
-        "family_history": family_history,
-        "used_app_before": used_app_before,
-        "ethnicity": ethnicity,
-        "austim": austim,
-        "contry_of_res": contry_of_res,
-        "relation": relation,
-        "result": 1  # Placeholder, not used in prediction
+        "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
+        "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
+        "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
+        "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before,
+        "ethnicity": ethnicity, "austim": austim, "contry_of_res": contry_of_res,
+        "relation": relation, "result": 0  # Placeholder, assuming 'result' was in original dataset but not a target
     }])
 
-    # Encode categorical features (ensure this matches training)
+    # Encode categorical variables
     input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
     input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
     input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
     input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
     input_data['austim'] = input_data['austim'].map({'no': 0, 'yes': 1})
+    input_data['relation'] = input_data['relation'].map({
+        'Self': 0, 'Parent': 1, 'Relative': 2, 'Health care professional': 3, 'Others': 4
+    })
+    input_data['ethnicity'] = input_data['ethnicity'].astype('category').cat.codes
+    input_data['contry_of_res'] = input_data['contry_of_res'].astype('category').cat.codes
 
+    # Ensure all expected features are present and ordered correctly
     try:
-        # Reorder columns to match model training input
         input_data = input_data[model.feature_names_in_]
         prediction = model.predict(input_data)[0]
         result = '🟢 ASD Negative' if prediction == 0 else '🔴 ASD Positive'
