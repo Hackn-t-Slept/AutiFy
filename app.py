@@ -1,19 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from PIL import Image
-import base64
-from io import BytesIO
 
 st.set_page_config(page_title="Autify - Autism Screening", page_icon="🧠", layout="centered")
-
-# Function to convert image to base64
-def image_to_bytes(image: Image.Image) -> bytes:
-    buffered = BytesIO()
-    image.save(buffered, format="PNG")
-    return base64.b64encode(buffered.getvalue())
-
-st.image_to_bytes = image_to_bytes  # Simple monkey patch
 
 # Load model
 @st.cache_resource
@@ -27,9 +16,10 @@ def load_model():
 model = load_model()
 
 # Custom CSS Styling
+
 def inject_custom_css():
-    bg_dark = """
-        radial-gradient(circle at top left, #2c3e50, #000000);
+    bg_light = """
+        linear-gradient(to top, #f5f7fa, #c3cfe2);
     """
 
     st.markdown(f"""
@@ -39,8 +29,8 @@ def inject_custom_css():
         transition: all 0.4s ease;
     }}
     .stApp {{
-        background: {bg_dark};
-        color: #FAFAFA;
+        background: {bg_light};
+        color: #222;
         animation: fadeIn 1.2s ease-in;
     }}
     @keyframes fadeIn {{
@@ -48,16 +38,16 @@ def inject_custom_css():
         to {{ opacity: 1; }}
     }}
     .card {{
-        background-color: #2D2D2D;
+        background-color: #ffffff;
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         margin-top: 20px;
         transition: all 0.3s ease;
     }}
     .card:hover {{
         transform: scale(1.01);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }}
     .result {{
         font-size: 1.6rem;
@@ -69,27 +59,37 @@ def inject_custom_css():
     .stButton button {{
         border-radius: 8px;
         padding: 10px 20px;
-        background-color: #2980b9;
+        background-color: #4a90e2;
         color: white;
         font-weight: bold;
     }}
     .stButton button:hover {{
-        background-color: #1f6391;
+        background-color: #357ABD;
+    }}
+    .logo-container {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px;
+    }}
+    .logo-container img {{
+        max-height: 80px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }}
     </style>
     """, unsafe_allow_html=True)
 
 inject_custom_css()
 
-# Logo and Title Side-by-Side
-logo = Image.open("Logo.png")
-logo_b64 = st.image_to_bytes(logo).decode('utf-8')
-st.markdown(f"""
-<div style='display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;'>
-    <img src='data:image/png;base64,{logo_b64}' style='height: 80px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);'/>
+# Logo Section
+st.markdown("""
+<div class='logo-container'>
+    <img src='Logo.png' alt='Autify Logo'>
     <div>
         <h1 style='margin: 0;'>Autify</h1>
-        <p style='margin: 0;'>We Connect the Dots—Even the Ones You Didn’t See</p>
+        <p style='margin: 0; font-size: 0.95rem;'>We Connect the Dots—Even the Ones You Didn’t See</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -144,7 +144,7 @@ with st.form("autism_form"):
     st.markdown(" ")
     submit = st.form_submit_button("🔍 Predict")
 
-# Prediction Logic
+# Predict
 if submit and model:
     input_data = pd.DataFrame([{
         'A1_Score': A1, 'A2_Score': A2, 'A3_Score': A3, 'A4_Score': A4, 'A5_Score': A5,
