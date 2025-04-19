@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+from PIL import Image
 
 st.set_page_config(page_title="Autify - Autism Screening", page_icon="🧠", layout="centered")
 
@@ -16,7 +17,6 @@ def load_model():
 model = load_model()
 
 # Custom CSS Styling
-
 def inject_custom_css():
     bg_dark = """
         radial-gradient(circle at top left, #2c3e50, #000000);
@@ -66,30 +66,19 @@ def inject_custom_css():
     .stButton button:hover {{
         background-color: #1f6391;
     }}
-    .logo-container {{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-    }}
-    .logo-container img {{
-        max-height: 100px;
-    }}
     </style>
     """, unsafe_allow_html=True)
 
 inject_custom_css()
 
-# Logo Section
+# Logo and Title
 st.markdown("""
-<div class='logo-container'>
-    <img src='Logo.png' alt='Autify Logo'>
+<div style='display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;'>
+    <img src='Logo.png' alt='Autify Logo' style='height:100px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 10px;'>
+    <h1 style='text-align: center;'>🧠 Autify</h1>
+    <p style='text-align: center;'>We Connect the Dots—Even the Ones You Didn’t See</p>
 </div>
 """, unsafe_allow_html=True)
-
-# Title & Description
-st.markdown("<h1 style='text-align: center;'>🧠 Autify</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>We Connect the Dots—Even the Ones You Didn’t See</p>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -141,7 +130,7 @@ with st.form("autism_form"):
     st.markdown(" ")
     submit = st.form_submit_button("🔍 Predict")
 
-# Predict
+# Prediction Logic
 if submit and model:
     input_data = pd.DataFrame([{
         'A1_Score': A1, 'A2_Score': A2, 'A3_Score': A3, 'A4_Score': A4, 'A5_Score': A5,
