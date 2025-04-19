@@ -2,75 +2,114 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load the trained model
+st.set_page_config(page_title="Autify - Autism Screening", page_icon="🧠", layout="centered")
+
+# Load model
 @st.cache_resource
 def load_model():
     try:
         return joblib.load("autism_prediction_model.pkl")
     except:
-        st.error("🚫 Model file not found. Make sure 'autism_prediction_model.pkl' is available.")
+        st.error("Model file not found. Please ensure 'autism_prediction_model.pkl' is in the same folder.")
         return None
 
 model = load_model()
 
-# Page setup
-st.set_page_config(page_title="🧠 Autify - ASD Predictor", layout="centered")
-st.markdown(
-    """
+# Dark mode toggle
+dark_mode = st.toggle("🌙 Toggle Dark Mode")
+
+# Custom CSS Styling
+def inject_custom_css(dark=False):
+    st.markdown("""
     <style>
-    .main { background-color: #f4f4f8; }
+    html, body, [class*="css"]  {
+        font-family: 'Segoe UI', sans-serif;
+        transition: all 0.4s ease;
+    }
+    .stApp {
+        background-color: %s;
+        color: %s;
+    }
+    .card {
+        background-color: %s;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+    .result {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+    }
+    .stButton button {
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """ % (
+        "#1E1E1E" if dark else "#F7F7F7",  # background
+        "#FAFAFA" if dark else "#111",    # text
+        "#2D2D2D" if dark else "#FFFFFF"  # card bg
+    ), unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center; color: #4B0082;'>🧠 Autify</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: gray;'>Your personal ASD Screening Assistant</h4>", unsafe_allow_html=True)
+inject_custom_css(dark=dark_mode)
 
-st.markdown("---")
+# Title & Description
+st.markdown("<h1 style='text-align: center;'>🧠 Autify</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Quick AQ-10 Based Autism Screening</p>", unsafe_allow_html=True)
 
-# Input form
+st.divider()
+
+# Input Form
 with st.form("autism_form"):
-    st.subheader("📋 AQ-10 Questions")
+    st.markdown("#### 🧩 AQ-10 Questions")
 
     col1, col2 = st.columns(2)
     with col1:
-        A1 = st.radio("1️⃣ Notice small sounds others don't?", [0, 1], horizontal=True)
-        A2 = st.radio("2️⃣ Focus more on big picture than details?", [0, 1], horizontal=True)
-        A3 = st.radio("3️⃣ Easy to multitask?", [0, 1], horizontal=True)
-        A4 = st.radio("4️⃣ Can resume after interruption?", [0, 1], horizontal=True)
-        A5 = st.radio("5️⃣ Understand implied meanings?", [0, 1], horizontal=True)
+        A1 = st.selectbox("1. I often notice small sounds when others do not.", [0, 1])
+        A2 = st.selectbox("2. I usually concentrate more on the whole picture than the details.", [0, 1])
+        A3 = st.selectbox("3. I find it easy to do more than one thing at once.", [0, 1])
+        A4 = st.selectbox("4. If there is an interruption, I can switch back easily.", [0, 1])
+        A5 = st.selectbox("5. I find it easy to ‘read between the lines’.", [0, 1])
+    
     with col2:
-        A6 = st.radio("6️⃣ Know if someone is bored?", [0, 1], horizontal=True)
-        A7 = st.radio("7️⃣ Imagine story characters easily?", [0, 1], horizontal=True)
-        A8 = st.radio("8️⃣ Recognize feelings from faces?", [0, 1], horizontal=True)
-        A9 = st.radio("9️⃣ Find it hard to understand intentions?", [0, 1], horizontal=True)
-        A10 = st.radio("🔟 Enjoy social situations?", [0, 1], horizontal=True)
+        A6 = st.selectbox("6. I know if someone is getting bored while I’m talking.", [0, 1])
+        A7 = st.selectbox("7. I can imagine characters while reading stories.", [0, 1])
+        A8 = st.selectbox("8. I understand feelings by facial expression.", [0, 1])
+        A9 = st.selectbox("9. I find it hard to understand others' intentions.", [0, 1])
+        A10 = st.selectbox("10. I enjoy social situations.", [0, 1])
 
-    st.markdown("---")
-    st.subheader("🧍 Demographics")
+    st.divider()
+    st.markdown("#### 👤 Personal Information")
 
     col1, col2 = st.columns(2)
     with col1:
-        age = st.slider("📅 Age", 1, 100, 25)
-        result = st.slider("🧪 AQ Test Score (0–20)", 0, 20, 6)
-        gender = st.selectbox("👤 Gender", ['m', 'f'])
-        jaundice = st.selectbox("🍼 Born with jaundice?", ['yes', 'no'])
-        family_history = st.selectbox("🧬 Family history of ASD?", ['yes', 'no'])
-    with col2:
-        used_app_before = st.selectbox("📱 Used screening app before?", ['yes', 'no'])
-        austim = st.selectbox("📖 Prior ASD diagnosis?", ['yes', 'no'])
-        ethnicity = st.selectbox("🌍 Ethnicity", [
-            'White', 'Latino', 'Black', 'Asian', 'Middle Eastern', 'Pasifika',
-            'South Asian', 'Hispanic', 'Turkish', 'Others'
-        ])
-        country = st.selectbox("🏡 Country of Residence", ['USA', 'UK', 'India', 'Canada', 'Others'])
-        relation = st.selectbox("🤝 Relation of respondent", [
-            'Self', 'Parent', 'Relative', 'Health care professional', 'Others'
-        ])
+        age = st.slider("Age", 1, 100, 25)
+        gender = st.radio("Gender", ['m', 'f'], horizontal=True)
+        jaundice = st.radio("Born with jaundice?", ['yes', 'no'], horizontal=True)
+        family_history = st.radio("Family history of ASD?", ['yes', 'no'], horizontal=True)
 
+    with col2:
+        result = st.slider("AQ Test Result Score (0–10 recommended)", 0, 20, 6)
+        used_app_before = st.radio("Used this app before?", ['yes', 'no'], horizontal=True)
+        austim = st.radio("Diagnosed with autism before?", ['yes', 'no'], horizontal=True)
+
+    st.divider()
+    st.markdown("#### 🌍 Background")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        ethnicity = st.selectbox("Ethnicity", ['White', 'Latino', 'Black', 'Asian', 'Middle Eastern', 'Pasifika', 'South Asian', 'Hispanic', 'Turkish', 'Others'])
+    with col2:
+        country = st.selectbox("Country of Residence", ['USA', 'UK', 'India', 'Canada', 'Others'])
+
+    relation = st.selectbox("Who is completing this test?", ['Self', 'Parent', 'Relative', 'Health care professional', 'Others'])
+
+    st.markdown(" ")
     submit = st.form_submit_button("🔍 Predict")
 
+# Predict
 if submit and model:
     input_data = pd.DataFrame([{
         'A1_Score': A1, 'A2_Score': A2, 'A3_Score': A3, 'A4_Score': A4, 'A5_Score': A5,
@@ -82,22 +121,26 @@ if submit and model:
         'family_history': family_history
     }])
 
-    # Encoding categorical features
+    input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
+    input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
+    input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
+    input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
+    input_data['austim'] = input_data['austim'].map({'no': 0, 'yes': 1})
+    input_data['relation'] = input_data['relation'].map({
+        'Self': 0, 'Parent': 1, 'Relative': 2, 'Health care professional': 3, 'Others': 4
+    })
+    input_data['ethnicity'] = input_data['ethnicity'].astype('category').cat.codes
+    input_data['contry_of_res'] = input_data['contry_of_res'].astype('category').cat.codes
+
     try:
-        input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
-        input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
-        input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
-        input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
-        input_data['austim'] = input_data['austim'].map({'no': 0, 'yes': 1})
-        input_data['relation'] = input_data['relation'].map({
-            'Self': 0, 'Parent': 1, 'Relative': 2, 'Health care professional': 3, 'Others': 4
-        })
-        input_data['ethnicity'] = input_data['ethnicity'].astype('category').cat.codes
-        input_data['contry_of_res'] = input_data['contry_of_res'].astype('category').cat.codes
-
-        # Match model input columns
         input_data = input_data[model.feature_names_in_]
-
         prediction = model.predict(input_data)[0]
-        if prediction == 1:
-            st.markdown("### 🧠 Result: <span style='color:red'>
+        result_text = "🔴 Autism Positive" if prediction == 1 else "🟢 Not Autism Positive"
+        
+        st.markdown(f"""
+        <div class="card result">
+            {result_text}
+        </div>
+        """, unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Something went wrong during prediction: {e}")
