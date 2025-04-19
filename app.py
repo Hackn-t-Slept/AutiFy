@@ -15,6 +15,16 @@ def load_model():
 
 model = load_model()
 
+# Show logo
+st.markdown(
+    """
+    <div style="text-align: center;">
+        <img src="logo.png" alt="Logo" width="150">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # Dark mode toggle
 dark_mode = st.toggle("🌙 Toggle Dark Mode")
 
