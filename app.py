@@ -45,7 +45,7 @@ if submit:
         "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
         "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before,
         "ethnicity": ethnicity, "austim": austim, "contry_of_res": contry_of_res,
-        "relation": relation
+        "relation": relation, "result": 0  # Placeholder, assuming 'result' was in original dataset but not a target
     }])
 
     # Encode categorical variables
@@ -62,17 +62,9 @@ if submit:
 
     # Ensure all expected features are present and ordered correctly
     try:
-        input_data = input_data[model.feature_names_in_]  # Ensure correct feature order
-        prediction_proba = model.predict_proba(input_data)[0]  # Get prediction probabilities
-        threshold = 0.5  # Default threshold
-
-        if prediction_proba[1] >= threshold:
-            result = '🔴 ASD Positive'
-        else:
-            result = '🟢 ASD Negative'
-
+        input_data = input_data[model.feature_names_in_]
+        prediction = model.predict(input_data)[0]
+        result = '🟢 ASD Negative' if prediction == 0 else '🔴 ASD Positive'
         st.success(f"Prediction: {result}")
-        st.write(f"Prediction Probabilities: {prediction_proba}")
-
     except Exception as e:
         st.error(f"Prediction failed. Error: {e}")
