@@ -42,6 +42,10 @@ def inject_custom_css():
         background: {bg_gradient};
         color: #FAFAFA;
         animation: fadeIn 1.2s ease-in;
+        border: 5px solid #6A3E98; /* Adds a border around the entire page */
+        border-radius: 16px; /* Makes the edges rounded */
+        padding: 15px; /* Adds spacing inside the border */
+        margin: 10px; /* Adds spacing between the border and viewport */
     }}
     @keyframes fadeIn {{
         from {{ opacity: 0; }}
@@ -49,6 +53,7 @@ def inject_custom_css():
     }}
     .card {{
         background-color: #fff;
+        border: 2px solid #6A3E98; /* Border for individual card components */
         border-radius: 16px;
         padding: 20px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.15);
@@ -67,6 +72,7 @@ def inject_custom_css():
         padding-bottom: 10px;
     }}
     .stButton button {{
+        border: 2px solid #6849A2; /* Border for buttons */
         border-radius: 8px;
         padding: 10px 20px;
         background-color: #7C5CB9;
@@ -75,6 +81,7 @@ def inject_custom_css():
     }}
     .stButton button:hover {{
         background-color: #6849A2;
+        border-color: #563885; /* Darker border on hover */
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -176,6 +183,4 @@ if submit and model:
         <div class="card result">
             {result_text}
         </div>
-        """, unsafe_allow_html=True)
-    except Exception as e:
-        st.error(f"Something went wrong during prediction: {e}")
+        """,
