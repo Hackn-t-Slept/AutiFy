@@ -15,59 +15,81 @@ def load_model():
 
 model = load_model()
 
-# Show logo
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <img src="Logo.png" alt="Logo" width="150">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-# Dark mode toggle
-dark_mode = st.toggle("🌙 Toggle Dark Mode")
-
 # Custom CSS Styling
-def inject_custom_css(dark=False):
-    st.markdown("""
+
+def inject_custom_css():
+    bg_dark = """
+        radial-gradient(circle at top left, #2c3e50, #000000);
+    """
+
+    st.markdown(f"""
     <style>
-    html, body, [class*="css"]  {
+    html, body, [class*="css"] {{
         font-family: 'Segoe UI', sans-serif;
         transition: all 0.4s ease;
-    }
-    .stApp {
-        background-color: %s;
-        color: %s;
-    }
-    .card {
-        background-color: %s;
+    }}
+    .stApp {{
+        background: {bg_dark};
+        color: #FAFAFA;
+        animation: fadeIn 1.2s ease-in;
+    }}
+    @keyframes fadeIn {{
+        from {{ opacity: 0; }}
+        to {{ opacity: 1; }}
+    }}
+    .card {{
+        background-color: #2D2D2D;
         border-radius: 16px;
         padding: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         margin-top: 20px;
-    }
-    .result {
-        font-size: 1.5rem;
+        transition: all 0.3s ease;
+    }}
+    .card:hover {{
+        transform: scale(1.01);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }}
+    .result {{
+        font-size: 1.6rem;
         font-weight: bold;
         text-align: center;
-    }
-    .stButton button {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }}
+    .stButton button {{
         border-radius: 8px;
         padding: 10px 20px;
-    }
+        background-color: #2980b9;
+        color: white;
+        font-weight: bold;
+    }}
+    .stButton button:hover {{
+        background-color: #1f6391;
+    }}
+    .logo-container {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }}
+    .logo-container img {{
+        max-height: 100px;
+    }}
     </style>
-    """ % (
-        "#1E1E1E" if dark else "#F7F7F7",  # background
-        "#FAFAFA" if dark else "#111",    # text
-        "#2D2D2D" if dark else "#FFFFFF"  # card bg
-    ), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-inject_custom_css(dark=dark_mode)
+inject_custom_css()
+
+# Logo Section
+st.markdown("""
+<div class='logo-container'>
+    <img src='Logo.png' alt='Autify Logo'>
+</div>
+""", unsafe_allow_html=True)
 
 # Title & Description
 st.markdown("<h1 style='text-align: center;'>🧠 Autify</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Quick AQ-10 Based Autism Screening</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>We Connect the Dots—Even the Ones You Didn’t See</p>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -82,7 +104,7 @@ with st.form("autism_form"):
         A3 = st.selectbox("3. I find it easy to do more than one thing at once.", [0, 1])
         A4 = st.selectbox("4. If there is an interruption, I can switch back easily.", [0, 1])
         A5 = st.selectbox("5. I find it easy to ‘read between the lines’.", [0, 1])
-    
+
     with col2:
         A6 = st.selectbox("6. I know if someone is getting bored while I’m talking.", [0, 1])
         A7 = st.selectbox("7. I can imagine characters while reading stories.", [0, 1])
@@ -146,7 +168,7 @@ if submit and model:
         input_data = input_data[model.feature_names_in_]
         prediction = model.predict(input_data)[0]
         result_text = "🔴 Autism Positive" if prediction == 1 else "🟢 Not Autism Positive"
-        
+
         st.markdown(f"""
         <div class="card result">
             {result_text}
