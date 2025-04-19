@@ -33,11 +33,12 @@ with st.form("autism_form"):
 
 if submit:
     input_data = pd.DataFrame([{
-        "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
-        "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
-        "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
-        "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before
-    }])
+    "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
+    "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
+    "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
+    "jaundice": jaundice, "austim": family_history,  # <-- This fixes the error
+    "used_app_before": used_app_before
+}])
 
     # Encode categorical variables to match training data
     input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
