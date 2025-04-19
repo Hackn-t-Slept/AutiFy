@@ -40,12 +40,21 @@ if submit:
         "used_app_before": used_app_before
     }])
 
-    # Encode categorical variables to match training data
+    # Encode categorical variables
     input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
     input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
     input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
     input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
 
+    # ✅ Reorder columns to match model training data
+    expected_columns = [
+        'A1_Score', 'A2_Score', 'A3_Score', 'A4_Score', 'A5_Score',
+        'A6_Score', 'A7_Score', 'A8_Score', 'A9_Score', 'A10_Score',
+        'age', 'gender', 'jaundice', 'family_history', 'used_app_before'
+    ]
+    input_data = input_data.reindex(columns=expected_columns)
+
+    # Predict
     prediction = model.predict(input_data)[0]
     result = '🟢 ASD Negative' if prediction == 0 else '🔴 ASD Positive'
-    st.success(f"*Prediction:* {result}")
+    st.success(f"Prediction: {result}")
