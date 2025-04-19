@@ -40,14 +40,14 @@ with st.form("autism_form"):
 
 if submit:
     input_data = pd.DataFrame([{
-        "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
-        "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
-        "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
-        "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before,
-        "ethnicity": ethnicity, "austim": austim, "contry_of_res": contry_of_res,
-        "relation": relation
-    }])
-
+    "A1_Score": A1_Score, "A2_Score": A2_Score, "A3_Score": A3_Score, "A4_Score": A4_Score,
+    "A5_Score": A5_Score, "A6_Score": A6_Score, "A7_Score": A7_Score, "A8_Score": A8_Score,
+    "A9_Score": A9_Score, "A10_Score": A10_Score, "age": age, "gender": gender,
+    "jaundice": jaundice, "family_history": family_history, "used_app_before": used_app_before,
+    "ethnicity": ethnicity, "austim": austim, "contry_of_res": contry_of_res,
+    "relation": relation
+}])
+    
     # Encode categorical variables
     input_data['gender'] = input_data['gender'].map({'m': 0, 'f': 1})
     input_data['jaundice'] = input_data['jaundice'].map({'no': 0, 'yes': 1})
