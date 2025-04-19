@@ -88,7 +88,7 @@ st.markdown(f"""
 <div style='display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;'>
     <img src='data:image/png;base64,{logo_b64}' style='height: 80px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);'/>
     <div>
-        <h1 style='margin: 0;'>🧠 Autify</h1>
+        <h1 style='margin: 0;'>Autify</h1>
         <p style='margin: 0;'>We Connect the Dots—Even the Ones You Didn’t See</p>
     </div>
 </div>
