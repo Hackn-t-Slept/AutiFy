@@ -19,7 +19,7 @@ model = load_model()
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="logo.png" alt="Logo" width="150">
+        <img src="Logo.png" alt="Logo" width="150">
     </div>
     """,
     unsafe_allow_html=True
