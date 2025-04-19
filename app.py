@@ -29,7 +29,7 @@ model = load_model()
 # Custom CSS Styling
 def inject_custom_css():
     bg_gradient = """
-        linear-gradient(135deg, #f8d9f9, #fed9f4);
+        linear-gradient(135deg, #310E68, #4F2E7D);
     """
 
     st.markdown(f"""
@@ -40,7 +40,7 @@ def inject_custom_css():
     }}
     .stApp {{
         background: {bg_gradient};
-        color: #3D3D3D;
+        color: #FAFAFA;
         animation: fadeIn 1.2s ease-in;
     }}
     @keyframes fadeIn {{
@@ -69,12 +69,12 @@ def inject_custom_css():
     .stButton button {{
         border-radius: 8px;
         padding: 10px 20px;
-        background-color: #a565c5;
+        background-color: #7C5CB9;
         color: white;
         font-weight: bold;
     }}
     .stButton button:hover {{
-        background-color: #8e46ad;
+        background-color: #6849A2;
     }}
     </style>
     """, unsafe_allow_html=True)
