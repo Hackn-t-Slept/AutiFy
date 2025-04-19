@@ -2,8 +2,18 @@ import streamlit as st
 import pandas as pd
 import joblib
 from PIL import Image
+import base64
+from io import BytesIO
 
 st.set_page_config(page_title="Autify - Autism Screening", page_icon="🧠", layout="centered")
+
+# Function to convert image to base64
+def image_to_bytes(image: Image.Image) -> bytes:
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    return base64.b64encode(buffered.getvalue())
+
+st.image_to_bytes = image_to_bytes  # Simple monkey patch
 
 # Load model
 @st.cache_resource
@@ -71,13 +81,16 @@ def inject_custom_css():
 
 inject_custom_css()
 
-# Logo and Title
-st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+# Logo and Title Side-by-Side
 logo = Image.open("Logo.png")
-st.image(logo, width=100)
-st.markdown("""
-    <h1>🧠 Autify</h1>
-    <p>We Connect the Dots—Even the Ones You Didn’t See</p>
+logo_b64 = st.image_to_bytes(logo).decode('utf-8')
+st.markdown(f"""
+<div style='display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;'>
+    <img src='data:image/png;base64,{logo_b64}' style='height: 80px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);'/>
+    <div>
+        <h1 style='margin: 0;'>🧠 Autify</h1>
+        <p style='margin: 0;'>We Connect the Dots—Even the Ones You Didn’t See</p>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
