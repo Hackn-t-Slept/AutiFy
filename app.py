@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 from PIL import Image
 
-st.set_page_config(page_title="Autify - Autism Screening", layout="centered")
+st.set_page_config(page_title="Autify - Autism Screening", page_icon="🧠", layout="centered")
 
 # Load model
 @st.cache_resource
