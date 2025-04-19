@@ -46,15 +46,11 @@ if submit:
     input_data['family_history'] = input_data['family_history'].map({'no': 0, 'yes': 1})
     input_data['used_app_before'] = input_data['used_app_before'].map({'no': 0, 'yes': 1})
 
-    # ✅ Reorder columns to match model training data
-    expected_columns = [
-        'A1_Score', 'A2_Score', 'A3_Score', 'A4_Score', 'A5_Score',
-        'A6_Score', 'A7_Score', 'A8_Score', 'A9_Score', 'A10_Score',
-        'age', 'gender', 'jaundice', 'family_history', 'used_app_before'
-    ]
-    input_data = input_data.reindex(columns=expected_columns)
-
-    # Predict
-    prediction = model.predict(input_data)[0]
-    result = '🟢 ASD Negative' if prediction == 0 else '🔴 ASD Positive'
-    st.success(f"Prediction: {result}")
+    # Ensure all expected features are present and ordered correctly
+    try:
+        input_data = input_data[model.feature_names_in_]
+        prediction = model.predict(input_data)[0]
+        result = '🟢 ASD Negative' if prediction == 0 else '🔴 ASD Positive'
+        st.success(f"Prediction: {result}")
+    except Exception as e:
+        st.error(f"Prediction failed. Error: {e}")
