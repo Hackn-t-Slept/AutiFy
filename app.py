@@ -16,7 +16,7 @@ def load_model():
 
 model = load_model()
 
-st.title("🧠 Autism Spectrum Disorder (ASD) Prediction App")
+st.title("🧠 Autify")
 st.write("Answer the questions below to check for ASD traits (based on AQ-10 screening).")
 
 # Input form
